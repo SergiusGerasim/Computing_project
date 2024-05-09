@@ -1,0 +1,49 @@
+import methods
+import numpy as np
+import plotly.graph_objects as go
+
+def system(t, Y, k1, k2, k3, k4):
+    return np.array([k1 * (Y[1] - Y[1] * Y[0] + Y[0] - k2 * Y[0]**2),
+                    k3 * (-Y[1] - Y[0]*Y[1] + Y[2]),
+                    k4 * (Y[0] - Y[2])])
+
+def make_plot(x_array, method, y_zero, dimension, current_system):
+    y_array = method(x_array, y_zero, current_system, dimension)
+    print(x_array)
+    print(y_array)
+    data = [go.Scatter(x=x_array, y=y_array[:, 0], name='axe 1'), go.Scatter(x=x_array, y=y_array[:, 1], name='axe 2'),
+            go.Scatter(x=x_array, y=y_array[:, 2], name='axe 3')]
+    fig = go.Figure(data)
+    fig.update_layout(title=f'{x_array[1] - x_array[0]}, [{x_array[0]}, {x_array[-1]}]')
+    fig.show()
+
+def make_plot_economy(step, a, b, method, y_zero, dimension, current_system):
+    y_array = method(step, a, b, y_zero, current_system, dimension)
+    x_array = np.arange(a, b, step  * 10**4)
+    print(y_array)
+    data = [go.Scatter(x=x_array, y=y_array[:, 0], name='axe 1'), go.Scatter(x=x_array, y=y_array[:, 1], name='axe 2'),
+            go.Scatter(x=x_array, y=y_array[:, 2], name='axe 3')]
+    fig = go.Figure(data)
+    fig.update_layout(title=f'{x_array[1] - x_array[0]}, [{x_array[0]}, {x_array[-1]}]')
+    fig.show()
+
+k1 = 77.27
+k2 = 8.375 * 1e-6
+k3 = 1 / k1
+k4 = 0.161
+current_system = lambda x, y: system(x, y, k1, k2, k3, k4)
+
+y1_0 = 4
+y2_0 = 1.1
+y3_0 = 4
+y_zero = np.array([y1_0, y2_0, y3_0])
+
+t1 = 0
+t2 = 300
+
+step = 1e-6
+n = int((t2 - t1) / step)
+dimension = 3
+x_array = np.linspace(t1, t2, n + 1)
+
+make_plot_economy(step, t1, t2, methods.runge_kutta_method_economy, y_zero, dimension, current_system)
