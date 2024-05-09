@@ -54,7 +54,7 @@ def runge_kutta_method(x_array, y_zero, function, dimension):
         y_array[i] = y_array[i - 1] + (fi_1 + 2 * fi_2 + 2 * fi_3 + fi_4) / 6
     return y_array
 
-def runge_kutta_method_economy(step, a, b, y_zero, function, dimension, filter=1):
+def runge_kutta_method_economy(step, a, b, y_zero, function, dimension, filter=10000):
     number = int((b - a) / step)
     y_array = np.empty((number // filter + 1, dimension))
     y = y_zero
@@ -83,7 +83,7 @@ def adams_bashfort_method(x_array, y_zero, function, dimension):
         f_array.append(function(x_array[i], y_array[i]))
     return y_array
 
-def adams_bashfort_method_economy(step, a, b, y_zero, function, dimension, filter= 1):
+def adams_bashfort_method_economy(step, a, b, y_zero, function, dimension, filter= 10000):
     number = int((b - a) / step)
     y_array = np.empty((number // filter + 1, dimension))
     y_start = runge_kutta_method(np.array([a, a + step, a + step * 2, a + step * 3]), y_zero, function, dimension)
@@ -117,7 +117,7 @@ def adams_bashfort_molton_method(x_array, y_zero, function, dimension):
         f_array[3] = function(x_array[i], y_array[i])
     return y_array
 
-def adams_bashfort_molton_method_economy(step, a, b, y_zero, function, dimension, filter= 1):
+def adams_bashfort_molton_method_economy(step, a, b, y_zero, function, dimension, filter= 10000):
     number = int((b - a) / step)
     y_array = np.empty((number // filter + 1, dimension))
     y_start = runge_kutta_method(np.array([a, a + step, a + step * 2, a + step * 3]), y_zero, function, dimension)
@@ -150,7 +150,7 @@ def gear_method(x_array, y_zero, function, dimension):
             y_iter = y_array[i]
     return y_array
 
-def gear_method_economy(step, a, b, y_zero, function, dimension, filter= 1, iterations= 4):
+def gear_method_economy(step, a, b, y_zero, function, dimension, filter= 10000, iterations= 4):
     number = int((b - a) / step)
     y_array = np.empty((number // filter + 1, dimension))
     y = runge_kutta_method(np.array([a, a + step, a + step * 2, a + step * 3]), y_zero, function, dimension)
