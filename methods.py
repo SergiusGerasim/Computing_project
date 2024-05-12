@@ -1,4 +1,5 @@
 import numpy as np
+from numba import njit
 
 def euler_method(x_array, y_zero, function, dimension):
     step = x_array[1] - x_array[0]
@@ -9,6 +10,7 @@ def euler_method(x_array, y_zero, function, dimension):
         y_array[i] = y_array[i - 1] + step * function(x_array[i - 1], y_array[i - 1])
     return y_array
 
+@njit
 def euler_method_economy(step, a, b, y_zero, function, dimension, filter=10000):
     number = int((b - a) / step)
     y_array = np.empty((number - 1) // filter + 1, dimension)
@@ -30,6 +32,7 @@ def euler_method_recalculation(x_array, y_zero, function, dimension):
         y_array[i] = y_array[i - 1] + step * (function(x_array[i - 1], y_array[i - 1]) + function(x_array[i], y_array[i])) / 2
     return y_array
 
+@njit
 def euler_method_recalculation_economy(step, a, b, y_zero, function, dimension, filter=10000):
     number = int((b - a) / step)
     y_array = np.empty((number - 1) // filter + 1, dimension)
@@ -54,6 +57,7 @@ def runge_kutta_method(x_array, y_zero, function, dimension):
         y_array[i] = y_array[i - 1] + (fi_1 + 2 * fi_2 + 2 * fi_3 + fi_4) / 6
     return y_array
 
+@njit
 def runge_kutta_method_economy(step, a, b, y_zero, function, dimension, filter=10000):
     number = int((b - a) / step)
     y_array = np.empty((number // filter + 1, dimension))
@@ -83,6 +87,7 @@ def adams_bashfort_method(x_array, y_zero, function, dimension):
         f_array.append(function(x_array[i], y_array[i]))
     return y_array
 
+@njit
 def adams_bashfort_method_economy(step, a, b, y_zero, function, dimension, filter= 10000):
     number = int((b - a) / step)
     y_array = np.empty((number // filter + 1, dimension))
@@ -117,6 +122,7 @@ def adams_bashfort_molton_method(x_array, y_zero, function, dimension):
         f_array[3] = function(x_array[i], y_array[i])
     return y_array
 
+@njit
 def adams_bashfort_molton_method_economy(step, a, b, y_zero, function, dimension, filter= 10000):
     number = int((b - a) / step)
     y_array = np.empty((number // filter + 1, dimension))
@@ -150,6 +156,7 @@ def gear_method(x_array, y_zero, function, dimension):
             y_iter = y_array[i]
     return y_array
 
+@njit
 def gear_method_economy(step, a, b, y_zero, function, dimension, filter= 10000, iterations= 4):
     number = int((b - a) / step)
     y_array = np.empty((number // filter + 1, dimension))
