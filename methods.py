@@ -13,7 +13,7 @@ def euler_method(x_array, y_zero, function, dimension):
 @njit
 def euler_method_economy(step, a, b, y_zero, function, dimension, filter=10000):
     number = int((b - a) / step)
-    y_array = np.empty((number - 1) // filter + 1, dimension)
+    y_array = np.empty((number // filter + 1, dimension), dtype=np.float64)
     y = y_zero
     for i in range(number - 1):
         x = a + step * i
@@ -35,7 +35,7 @@ def euler_method_recalculation(x_array, y_zero, function, dimension):
 @njit
 def euler_method_recalculation_economy(step, a, b, y_zero, function, dimension, filter=10000):
     number = int((b - a) / step)
-    y_array = np.empty((number - 1) // filter + 1, dimension)
+    y_array = np.empty(((number - 1) // filter + 1, dimension))
     y = y_zero
     for i in range(number - 1):
         x = a + step * i
@@ -44,6 +44,7 @@ def euler_method_recalculation_economy(step, a, b, y_zero, function, dimension, 
             y_array[i // filter] = y
     return y_array
 
+@njit
 def runge_kutta_method(x_array, y_zero, function, dimension):
     step = x_array[1] - x_array[0]
     size = x_array.shape[0]
